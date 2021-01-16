@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2021 at 11:38 AM
+-- Generation Time: Jan 16, 2021 at 06:18 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -24,6 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` int(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'games', '1', '2021-01-16 21:56:54', NULL),
+(2, 'dress', '1', '2021-01-16 22:00:23', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migration`
 --
 
@@ -40,6 +62,32 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1610791751),
 ('m130524_201442_init', 1610791754),
 ('m190124_110200_add_verification_token_column_to_user_table', 1610791754);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `description` varchar(250) DEFAULT NULL,
+  `imagename` varchar(50) NOT NULL,
+  `imagepath` varchar(250) NOT NULL,
+  `price` decimal(6,2) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `title`, `category_id`, `description`, `imagename`, `imagepath`, `price`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'kurti', 1, '', 'gallery-160031e81c9320.jpg', 'C:\\xampps\\htdocs\\products\\backend/web/uploads/gallery-160031e81c9320.jpg', '10.00', '1', '2021-01-16 22:42:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -74,10 +122,23 @@ INSERT INTO `user` (`id`, `username`, `role`, `auth_key`, `password_hash`, `pass
 --
 
 --
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `migration`
 --
 ALTER TABLE `migration`
   ADD PRIMARY KEY (`version`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_category_id` (`category_id`);
 
 --
 -- Indexes for table `user`
@@ -93,10 +154,32 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_category_id` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
